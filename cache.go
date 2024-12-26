@@ -473,9 +473,43 @@ func (c *Cache[T]) PushSlice(key string, values T, duration time.Duration) error
 
 	if existingVal.Kind() == reflect.Slice && newVal.Kind() == reflect.Slice {
 		combinedSlice := reflect.AppendSlice(existingVal, newVal)
-		c.Set(key, any(combinedSlice.Interface()).(T), duration)
+		c.Set(key, combinedSlice.Interface().(T), duration)
 		return nil
 	}
 
 	return fmt.Errorf("values must be slice type")
+}
+
+// PushMap merges values into the map in cache
+// Returns error if the value is not a map type
+func (c *Cache[T]) PushMap(key string, values T, duration time.Duration) error {
+	item := c.Get(key)
+	if item == nil {
+		c.Set(key, values, duration)
+		return nil
+	}
+
+	existingVal := reflect.ValueOf(item.Value())
+	newVal := reflect.ValueOf(values)
+
+	if existingVal.Kind() == reflect.Map && newVal.Kind() == reflect.Map {
+		if existingVal.Type() != newVal.Type() {
+			return fmt.Errorf("map types do not match")
+		}
+
+		// 创建新的 map 并复制现有值
+		combined := reflect.MakeMap(existingVal.Type())
+		for _, key := range existingVal.MapKeys() {
+			combined.SetMapIndex(key, existingVal.MapIndex(key))
+		}
+		// 合并新值
+		for _, key := range newVal.MapKeys() {
+			combined.SetMapIndex(key, newVal.MapIndex(key))
+		}
+
+		c.Set(key, combined.Interface().(T), duration)
+		return nil
+	}
+
+	return fmt.Errorf("values must be map type")
 }

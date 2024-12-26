@@ -646,7 +646,7 @@ func Test_Cache_Inc(t *testing.T) {
 	assert.Nil(t, err)
 	assert.Equal(t, int64(8), val)
 
-	// 测试对已存在��键进行减少
+	// 测试对已存在的键进行减少
 	val, err = cache.Dec("counter", 4)
 	assert.Nil(t, err)
 	assert.Equal(t, int64(4), val)
@@ -752,6 +752,37 @@ func Test_Cache_PushSlice(t *testing.T) {
 	assert.Equal(t, 2, result[1])
 	assert.Equal(t, 3, result[2])
 	assert.Equal(t, 4, result[3])
+}
+
+func Test_PushMap(t *testing.T) {
+	cache := New(Configure[map[string]int]())
+	defer cache.Stop()
+
+	// 测试1: 初始设置
+	err := cache.PushMap("mymap", map[string]int{"a": 1, "b": 2}, time.Minute)
+	assert.Nil(t, err)
+
+	item := cache.Get("mymap")
+	assert.NotNil(t, item)
+	expectedMap := map[string]int{"a": 1, "b": 2}
+	actualMap := item.Value()
+	assert.Equal(t, len(actualMap), len(expectedMap))
+	for k, v := range expectedMap {
+		assert.Equal(t, actualMap[k], v)
+	}
+
+	// 测试2: 合并新值
+	err = cache.PushMap("mymap", map[string]int{"c": 3, "d": 4}, time.Minute)
+	assert.Nil(t, err)
+
+	item = cache.Get("mymap")
+	assert.NotNil(t, item)
+	expectedMap = map[string]int{"a": 1, "b": 2, "c": 3, "d": 4}
+	actualMap = item.Value()
+	assert.Equal(t, len(actualMap), len(expectedMap))
+	for k, v := range expectedMap {
+		assert.Equal(t, actualMap[k], v)
+	}
 }
 
 type SizedItem struct {

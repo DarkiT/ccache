@@ -112,8 +112,8 @@ items := map[string]string{
 cache.SetMulti(items, time.Minute*10)
 ```
 
-### PushSlice
-向切片类型的缓存追加值：
+### PushSlice/PushMap
+向切片、Map类型的缓存追加值：
 ```go
 // 设置初始切片
 cache.Set("numbers", []int{1, 2, 3}, time.Minute)
@@ -122,6 +122,14 @@ cache.Set("numbers", []int{1, 2, 3}, time.Minute)
 err := cache.PushSlice("numbers", []int{4}, time.Minute)
 if err != nil {
     // 处理错误
+}
+// 设置初始切片
+cache.Set("map_numbers", map[string]int{"a": 1, "b": 2}, time.Minute)
+
+// 追加新的值
+err := cache.PushMap("map_numbers", map[string]int{"c": 3, "d": 4}, time.Minute)
+if err != nil {
+// 处理错误
 }
 ```
 
