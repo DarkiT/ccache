@@ -2,8 +2,8 @@
 
 [![GoDoc](https://godoc.org/github.com/darkit/ccache?status.svg)](https://godoc.org/github.com/darkit/ccache)
 [![Go Report Card](https://goreportcard.com/badge/github.com/darkit/ccache)](https://goreportcard.com/report/github.com/darkit/ccache)
-[![Build Status](https://travis-ci.org/pkg/ccache.svg?branch=master)](https://travis-ci.org/pkg/ccache)
-[![Coverage Status](https://coveralls.io/repos/github/pkg/ccache/badge.svg?branch=master)](https://coveralls.io/github/pkg/ccache?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/DarkiT/ccache/badge.svg?branch=master)](https://coveralls.io/github/DarkiT/ccache?branch=master)
+[![MIT License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
 CCache 是一个用 Go 语言编写的 LRU 缓存，专注于支持高并发。
 
