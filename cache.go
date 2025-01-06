@@ -390,14 +390,14 @@ func (c *Cache[T]) gc() int {
 }
 
 // Has checks if the key exists in cache and returns whether it exists along with its value
-// Returns (false, zero value) if the key doesn't exist or is expired
-func (c *Cache[T]) Has(key string) (bool, T) {
+// Returns (zero value, false) if the key doesn't exist or is expired
+func (c *Cache[T]) Has(key string) (T, bool) {
 	item := c.Get(key)
 	if item == nil || item.Expired() {
 		var zero T
-		return false, zero
+		return zero, false
 	}
-	return true, item.Value()
+	return item.Value(), true
 }
 
 // SetMulti sets multiple key-value pairs with the same duration

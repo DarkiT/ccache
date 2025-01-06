@@ -572,19 +572,19 @@ func Test_Cache_Has(t *testing.T) {
 	cache := New(Configure[string]())
 
 	// Test non-existent key
-	exists, value := cache.Has("missing")
+	value, exists := cache.Has("missing")
 	assert.Equal(t, exists, false)
 	assert.Equal(t, value, "")
 
 	// Test existing key
 	cache.Set("test", "value", time.Minute)
-	exists, value = cache.Has("test")
+	value, exists = cache.Has("test")
 	assert.Equal(t, exists, true)
 	assert.Equal(t, value, "value")
 
 	// Test expired key
 	cache.Set("expired", "old", time.Second*-1)
-	exists, value = cache.Has("expired")
+	value, exists = cache.Has("expired")
 	assert.Equal(t, exists, false)
 	assert.Equal(t, value, "")
 }

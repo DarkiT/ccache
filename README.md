@@ -76,7 +76,7 @@ cache.Delete("user:4")
 ### Has
 检查键是否存在：
 ```go
-exists, value := cache.Has("user:4")
+value, exists := cache.Has("user:4")
 if exists {
     // 使用 value
 } else {
